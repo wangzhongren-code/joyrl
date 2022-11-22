@@ -37,6 +37,73 @@
 <h1>Welcome to JoyRL’s documentation!<a class="headerlink" href="#welcome-to-joyrl-s-documentation" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n easyrl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
+conda activate easyrl
+pip install -U joyrl
+</pre></div>
+</div>
+<p>Torch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CPU</span>
+conda install <span class="nv">pytorch</span><span class="o">==</span><span class="m">1</span>.10.0 <span class="nv">torchvision</span><span class="o">==</span><span class="m">0</span>.11.0 <span class="nv">torchaudio</span><span class="o">==</span><span class="m">0</span>.10.0 cpuonly -c pytorch
+<span class="c1"># GPU</span>
+conda install <span class="nv">pytorch</span><span class="o">==</span><span class="m">1</span>.10.0 <span class="nv">torchvision</span><span class="o">==</span><span class="m">0</span>.11.0 <span class="nv">torchaudio</span><span class="o">==</span><span class="m">0</span>.10.0 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">11</span>.3 -c pytorch -c conda-forge
+<span class="c1"># GPU with mirrors</span>
+pip install <span class="nv">torch</span><span class="o">==</span><span class="m">1</span>.10.0+cu113 <span class="nv">torchvision</span><span class="o">==</span><span class="m">0</span>.11.0+cu113 <span class="nv">torchaudio</span><span class="o">==</span><span class="m">0</span>.10.0 --extra-index-url https://download.pytorch.org/whl/cu113
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<p>the following presents a demo to use joyrl, you donot need to care about complicated details of code. All your need is just to set hyper parameters including GeneralConfig() and AlgoConfig(), which is also shown in examples folder, and well trained results are shown in the benchmarks folder as well.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">joyrl</span> <span class="k">as</span> <span class="nn">jj</span>
+<span class="kn">import</span> <span class="nn">gym</span>
+<span class="k">class</span> <span class="nc">GeneralConfig</span><span class="p">():</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;CartPole-v1&quot;</span> <span class="c1"># name of environment</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">algo_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span> <span class="c1"># name of algorithm</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span> <span class="c1"># train or test</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># random seed</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span> <span class="c1"># device to use</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">train_eps</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># number of episodes for training</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">test_eps</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1"># number of episodes for testing</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">eval_eps</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># number of episodes for evaluation</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">eval_per_episode</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># evaluation per episode</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="o">=</span> <span class="mi">200</span> <span class="c1"># max steps for each episode</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">load_checkpoint</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">load_path</span> <span class="o">=</span> <span class="s2">&quot;tasks&quot;</span> <span class="c1"># path to load model</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">show_fig</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># show figure or not</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># save figure or not</span>
+
+<span class="k">class</span> <span class="nc">AlgoConfig</span><span class="p">():</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="c1"># set epsilon_start=epsilon_end can obtain fixed epsilon=epsilon_end</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_start</span> <span class="o">=</span> <span class="mf">0.95</span>  <span class="c1"># epsilon start value</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_end</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># epsilon end value</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_decay</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># epsilon decay rate</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.95</span>  <span class="c1"># discount factor</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="mf">0.0001</span>  <span class="c1"># learning rate</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">100000</span>  <span class="c1"># size of replay buffer</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1"># batch size</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">target_update</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># target network update frequency</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">value_layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;layer_type&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;layer_dim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;n_states&#39;</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+            <span class="s1">&#39;activation&#39;</span><span class="p">:</span> <span class="s1">&#39;relu&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;layer_type&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;layer_dim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+            <span class="s1">&#39;activation&#39;</span><span class="p">:</span> <span class="s1">&#39;relu&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;layer_type&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;layer_dim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">256</span><span class="p">,</span> <span class="s1">&#39;n_actions&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;activation&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">}]</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+   <span class="n">general_cfg</span> <span class="o">=</span> <span class="n">GeneralConfig</span><span class="p">()</span>
+   <span class="n">algo_cfg</span> <span class="o">=</span> <span class="n">AlgoConfig</span><span class="p">()</span>
+   <span class="n">jj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">general_cfg</span><span class="p">,</span><span class="n">algo_cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading">¶</a></h2>
+</section>
 </section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
