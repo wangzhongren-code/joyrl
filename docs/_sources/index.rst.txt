@@ -37,7 +37,7 @@ the following presents a demo to use joyrl, you donot need to care about complic
 
 .. code-block:: python
 
-   import joyrl as jj
+   import joyrl
    import gym
    class GeneralConfig():
       def __init__(self) -> None:
@@ -77,7 +77,7 @@ the following presents a demo to use joyrl, you donot need to care about complic
    if __name__ == "__main__":
       general_cfg = GeneralConfig()
       algo_cfg = AlgoConfig()
-      jj.run(general_cfg,algo_cfg)
+      joyrl.run(general_cfg,algo_cfg)
 
 Algorithms
 ------------
